@@ -1,0 +1,120 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Represents a user profile with sync and premium subscription metadata.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The Firebase Auth UID of the user."
+        },
+        "email": {
+          "type": "string",
+          "description": "The user email address."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "The user display name."
+        },
+        "isPremium": {
+          "type": "boolean",
+          "description": "Whether the user has active premium perks."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp. Submitted as FieldValue.serverTimestamp()."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Update timestamp. Submitted as FieldValue.serverTimestamp()."
+        }
+      },
+      "required": ["userId", "isPremium", "createdAt", "updatedAt"]
+    },
+    "UserItem": {
+      "title": "UserItem",
+      "description": "Represents a tracked anime or manga entry in the user library.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Item document ID."
+        },
+        "userId": {
+          "type": "string",
+          "description": "The Firebase Auth UID of the owner."
+        },
+        "malId": {
+          "type": "integer",
+          "description": "MyAnimeList ID from Jikan API."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the anime or manga."
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "Poster image URL."
+        },
+        "type": {
+          "type": "string",
+          "enum": ["ANIME", "MANGA"],
+          "description": "Entry type."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["WATCHING", "READING", "COMPLETED", "ON_HOLD", "PLAN_TO_WATCH"],
+          "description": "Tracking status."
+        },
+        "currentProgress": {
+          "type": "integer",
+          "description": "Episodes watched or chapters read."
+        },
+        "totalProgress": {
+          "type": "integer",
+          "description": "Total episodes or chapters if known, or 0."
+        },
+        "userScore": {
+          "type": "integer",
+          "description": "User score from 0 to 10."
+        },
+        "personalNotes": {
+          "type": "string",
+          "description": "Optional user notes."
+        },
+        "genres": {
+          "type": "array",
+          "description": "Associated genres for recommendations."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp. Submitted as FieldValue.serverTimestamp()."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Update timestamp. Submitted as FieldValue.serverTimestamp()."
+        }
+      },
+      "required": ["id", "userId", "malId", "title", "type", "status", "currentProgress", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "User profile documents keyed by userId."
+    },
+    "/users/{userId}/items/{itemId}": {
+      "schema": {
+        "$ref": "#/entities/UserItem"
+      },
+      "description": "Library of tracked animes and mangas belonging to userId."
+    }
+  }
+}
